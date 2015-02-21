@@ -6,6 +6,7 @@ import time
 def ssh_connect(recv_host, cmd_str) :
 	ssh = paramiko.SSHClient()
 
+	# TODO: Read hosts from config file
 	if recv_host == 'R1' :
 		dest_ip = '192.168.1.1'
 	elif recv_host == 'R2' :
