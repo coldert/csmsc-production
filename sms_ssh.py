@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+import ConfigParser
 import paramiko
 import time
 
@@ -15,6 +16,7 @@ def ssh_connect(recv_host, cmd_str) :
 	cmd_list = cmd_str.split(';')
 
 	ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+	# TODO: Whitelist phone-nr -> user/password
 	ssh.connect(dest_ip, username='landizz', password='admin')
 
 	chan = ssh.invoke_shell()

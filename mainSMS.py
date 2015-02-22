@@ -1,8 +1,12 @@
 #!/usr/bin/python
 
+import ConfigParser
 import sms_ssh
 import sms_tolk
 from urllib import unquote, quote
+
+conf = ConfigParser.ConfigParser()
+conf.read('config.cfg')
 
 # Function gets called from smsIO
 # by the handler when a GET request has been made. 
@@ -19,23 +23,17 @@ def incoming_sms(query_list):
 	# TODO: What happens if no HOST is included?
 	(command_host, command) = command_string.split('!')
 
-	# Parse COMMAND into actual Cisco IOS Commands
+	# Parse COMMAND into actual Cisco IOS commands
 	complete_cmd_string = sms_tolk.parse(command)
 
 	# Send a command to a host via SSH and returns the output
 	recv_host_output = sms_ssh.ssh_connect(command_host, complete_cmd_string)
 	
 	# Send a reply to the user via the sms gateway
-	# TODO: USER/PASS defined in config file
-	#send_sms(originator, recv_host_output, CELLSYNT_USER, CELLSYNT_PASS)
+	#send_sms(originator, recv_host_output, conf.get('cellsynt','user'), conf.get('cellsynt','pass'))
 
 # Function for sending SMS data back to the SMS gateway for handling
 def send_sms(recv, msg, user, passw):
-	
-	# Specifices settings for the SMS Gateway. NOTE: Can be modified and add other settings, check SMS Gateway API
-	gateway_url = "se-1.cellsynt.net"
-	gateway_file = "/sms.php?"
-	charset = "charset=UTF-8"
 
 	# Adds the data to the their respective attribute of the HTTP path.
 	username = 'username=' + user
@@ -44,11 +42,9 @@ def send_sms(recv, msg, user, passw):
 	text = 'text=' + quote(msg)
 	
 	# Makes the PATH for the GET message
-	gateway_request = gateway_file + username + '&' + password + '&' + dest + '&' + charset + '&' + text
-	print gateway_request	
+	gateway_request = conf.get('cellsynt','gateway_file') + username + '&' + password + '&' + dest + '&charset=' + conf.get('cellsynt','charset') + '&' + text
 	# Working HTTP GET, 'gateway_url' is the url from which you want to use GET on. NOTE: Tested against 'https://docs.python.org/2/'
-	http_connection = httplib.HTTPConnection(gateway_url)
-	
+	http_connection = httplib.HTTPConnection(conf.get('cellsynt','gateway_url'))
 	# Calling a function of the http connection object, from which we use GET with the specified path('gateway_request')
 	http_connection.request('GET', gateway_request)
 
