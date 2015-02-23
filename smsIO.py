@@ -2,7 +2,6 @@
 
 from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
 from urlparse import urlparse 
-import httplib
 import mainSMS
 
 # Class for BaseHTTPRequestHandler, receives HTTP SMS paths and passes them to be processed.
