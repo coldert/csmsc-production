@@ -7,6 +7,7 @@
 			</int>
 		</ip>
 		<route>do show ip route</route>
+		<arp>do show arp</arp>
 	</sh>
 	<int>interface
 		<ip>interface #INTERFACE; ip address #IPADDRESS</ip>
@@ -21,4 +22,7 @@
 	<ping>do ping #IPADDRESS
 		<src>do ping #IPADDRESS source #INTERFACE</src>
 	</ping>
+	<trace>do traceroute #IPADDRESS
+		<src>do traceroute #IPADDRESS source #INTERFACE</src>
+	</trace>
 </commands>

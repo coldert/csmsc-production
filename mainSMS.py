@@ -14,6 +14,7 @@ conf.read('config.cfg')
 def incoming_sms(query_list):
 	
 	# Split query string into parts
+	# TODO: Is there a better way?
 	for i in query_list:
 		part = i.split('=')
 		if part[0] == 'text': command_string = unquote(part[1])
@@ -35,6 +36,7 @@ def incoming_sms(query_list):
 		
 	# Send a reply to the user via the sms gateway
 	# Receiver must be in format 0046XXXXXXXXXXX
+	# TODO: Make function to parse phone number (add 00 if not present)
 	#send_sms('00'+originator, recv_host_output, conf.get('cellsynt','user'), conf.get('cellsynt','pass'))
 	print recv_host_output
 
@@ -58,4 +60,7 @@ def send_sms(recv, msg, user, passw):
 	# Gets the response, used for testing. Might be useful for checking status of the HTTP receiver.
 	# TODO: We should log all sent messages
 	connection_response = http_connection.getresponse()
-	print connection_response.status, connection_response.msg
+	if connection_response.status != 200:
+		print "SMS not sent.", connection_response.msg
+	else:
+		print "SMS sent successfully."

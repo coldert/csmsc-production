@@ -6,6 +6,7 @@ import time
 
 # Connect to the host and execute the commands
 # TODO: Resolve host and user outside of this function and send as arguments
+# TODO: recv_host should be the IP address. Resolve outside of this function
 def ssh_connect(recv_host, cmd_str) :
 	ssh = paramiko.SSHClient()
 

@@ -46,7 +46,7 @@ def parse(cmd_string):
 
 	# Find XML nodes that match the search string and replace the placeholders with their correct value
 	command = root.findtext(xpath_str)
-	# Loop through all ip-addresses and interfaces and put the in the right place in the command
+	# Loop through all ip-addresses and interfaces and put them in the right place in the command string
 	for i in str_ipaddress:
 		command = command.replace("#IPADDRESS", i, 1)
 	for i in str_interface:
@@ -65,7 +65,7 @@ def cidr_to_dotted(mask):
 		bits |= (1<<i)
 	return "%d.%d.%d.%d" % ((bits & 0xff000000) >> 24, (bits & 0xff0000) >> 16, (bits & 0xff00) >> 8, (bits & 0xff))
 
-# Run script with command line argument
+# Run script with command line argument (for testing purposes)
 if __name__ == "__main__":
 	import sys
 	print parse(sys.argv[1])
