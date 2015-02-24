@@ -27,7 +27,7 @@ def RunServerHTTP(port) :
 		httpd.serve_forever()
 
 	# CTRL-C to shutdown HTTP server and the script for the moment.
-	except :	
+	except KeyboardInterrupt:	
 		print "Server shutdown..."
 		httpd.server_close()
 

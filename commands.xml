@@ -12,6 +12,7 @@
 		<ip>interface #INTERFACE; ip address #IPADDRESS</ip>
 		<up>interface #INTERFACE; no shutdown</up>
 		<down>interface #INTERFACE; shutdown</down>
+		<show>do show ip interface #INTERFACE</show>
 	</int>
 	<route>
 		<static>ip route #IPADDRESS #INTERFACE #IPADDRESS #AD</static>
