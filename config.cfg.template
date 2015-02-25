@@ -1,0 +1,11 @@
+[SECTION]
+# SECTION is a section name used to retrieve the entries
+user=USERNAME
+pass=PASSWORD
+# Use user and pass if the service demands it
+gateway_url=SMS_GATEWAY_DOMAIN
+gateway_file=SMS_GATEWAY_FILE
+# The gateway_url is the domain part of the url (i.e www.example.com)
+# gateway_file is the actual file to handle the request (i.e sms.php)
+charset=UTF-8
+# charset should probably be UTF-8, but change according to sms-gateway manual
