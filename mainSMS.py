@@ -7,6 +7,7 @@ import sms_ssh
 import sms_tolk
 import re
 
+# Read main configuration file
 conf = ConfigParser.ConfigParser()
 conf.read('config.cfg')
 
@@ -21,7 +22,7 @@ def incoming_sms(command_string, originator_string):
 	complete_cmd_string = sms_tolk.parse(command)
 	
 	# originator must be in format 0046XXXXXXXXXXX
-	originator = parse_phone(originator_string)
+	originator = parse_phone(originator_string) if originator_string != "" else None
 
 	# Send a command to a host via SSH and returns the output
 	try:
@@ -30,11 +31,16 @@ def incoming_sms(command_string, originator_string):
 		recv_host_output = "Something went wrong. " + str(e.errno) + ": " + e.strerror
 		
 	# Send a reply to the user via the sms gateway
-	#send_sms(originator, recv_host_output, conf.get('cellsynt','user'), conf.get('cellsynt','pass'))
+	if originator:
+		print "SENDING SMS..."
+		#send_sms(originator, recv_host_output, conf.get('cellsynt','user'), conf.get('cellsynt','pass'))
+	else:
+		print "NO ORIGINATOR"
 	print recv_host_output
 
 # Parse phone number
 def parse_phone(phone_number):
+	# Make sure the number start with exactly two zeroes
 	return "00" + re.sub('^0*', '', phone_number)
 	
 # Function for sending SMS data back to the SMS gateway for handling
@@ -61,3 +67,8 @@ def send_sms(recv, msg, user, passw):
 		print "SMS not sent.", connection_response.msg
 	else:
 		print "SMS sent successfully."
+
+# Run script with command line argument (for testing purposes)
+if __name__ == "__main__":
+	import sys
+	print incoming_sms(sys.argv[1], sys.argv[2])

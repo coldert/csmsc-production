@@ -5,7 +5,7 @@ from urlparse import urlparse, parse_qs
 import mainSMS
 
 # Class for BaseHTTPRequestHandler, receives HTTP SMS paths and passes them to be processed.
-class GetRequestHandler(BaseHTTPRequestHandler) :
+class GetRequestHandler(BaseHTTPRequestHandler):
 	
 	# Handle GET requests
 	def do_GET(self) : 
@@ -33,4 +33,5 @@ def RunServerHTTP(port) :
 		print "Server shutdown..."
 		httpd.server_close()
 
+# Start the server
 RunServerHTTP(80)
