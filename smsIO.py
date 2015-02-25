@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
-from urlparse import urlparse 
+from urlparse import urlparse, parse_qs
 import mainSMS
 
 # Class for BaseHTTPRequestHandler, receives HTTP SMS paths and passes them to be processed.
@@ -9,11 +9,13 @@ class GetRequestHandler(BaseHTTPRequestHandler) :
 	
 	# Handle GET requests
 	def do_GET(self) : 
-		# Parse the requested url and split the query part of the string into key=value pairs
+		# Parse the requested url and get the query string parameters
 		get_path = urlparse(self.path)
-		query_request = get_path.query.split('&')
+		query = parse_qs(get_path.query)
+		command = query.get('text', '')[0]
+		originator = query.get('originator', '')[0]
 		# Calls the function which notifies the arrival of a SMS
-		mainSMS.incoming_sms(query_request)
+		mainSMS.incoming_sms(command, originator)
 
 # RunServerHTTP start httpd and reports to the handler (GetRequestHandler)
 def RunServerHTTP(port) :
