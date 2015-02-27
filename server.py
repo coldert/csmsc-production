@@ -2,7 +2,7 @@
 
 from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
 from urlparse import urlparse, parse_qs
-import mainSMS
+import sms_handling
 
 # Class for BaseHTTPRequestHandler, receives HTTP SMS paths and passes them to be processed.
 class GetRequestHandler(BaseHTTPRequestHandler):
@@ -15,7 +15,7 @@ class GetRequestHandler(BaseHTTPRequestHandler):
 		command = query.get('text', '')[0]
 		originator = query.get('originator', '')[0]
 		# Calls the function which notifies the arrival of a SMS
-		mainSMS.incoming_sms(command, originator)
+		sms_handling.incoming_sms(command, originator)
 
 # RunServerHTTP start httpd and reports to the handler (GetRequestHandler)
 def RunServerHTTP(port) :
