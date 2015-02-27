@@ -7,9 +7,13 @@ import sms_ssh
 import sms_tolk
 import re
 
-# Read main configuration file
+# Read configuration files
 conf = ConfigParser.ConfigParser()
 conf.read('config.cfg')
+users = ConfigParser.ConfigParser()
+users.read('users.cfg')
+hosts = ConfigParser.ConfigParser()
+hosts.read('hosts.cfg')
 
 # Function gets called from smsIO
 # by the handler when a GET request has been made. 
@@ -23,10 +27,12 @@ def incoming_sms(command_string, originator_string):
 	
 	# originator must be in format 0046XXXXXXXXXXX
 	originator = parse_phone(originator_string) if originator_string != "" else None
+	(username, password) = get_credentials(originator)
+	host_ip = get_host_ip(command_host)
 
 	# Send a command to a host via SSH and returns the output
 	try:
-		recv_host_output = sms_ssh.ssh_connect(command_host, complete_cmd_string)
+		recv_host_output = sms_ssh.ssh_connect(host_ip, complete_cmd_string, username, password)
 	except Exception as e:
 		recv_host_output = "Something went wrong. " + str(e.errno) + ": " + e.strerror
 		
@@ -43,6 +49,16 @@ def parse_phone(phone_number):
 	# Make sure the number start with exactly two zeroes
 	return "00" + re.sub('^0*', '', phone_number)
 	
+# Get username/password from list of phonenumbers
+def get_credentials(phone_number):
+	user = users.get(phone_number)
+	return user.split(':') if user else []
+
+# Get host IP from list of hostnames
+def get_host_ip(hostname):
+	host = hosts.get(hostname)
+	return host if host else ""
+
 # Function for sending SMS data back to the SMS gateway for handling
 def send_sms(recv, msg, user, passw):
 

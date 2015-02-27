@@ -5,27 +5,20 @@ import paramiko
 import time
 
 # Connect to the host and execute the commands
-# TODO: Resolve host and user outside of this function and send as arguments
-# TODO: recv_host should be the IP address. Resolve outside of this function
-def ssh_connect(recv_host, cmd_str) :
+def ssh_connect(recv_host, cmd_str, username, password):
 	ssh = paramiko.SSHClient()
-
-	# TODO: Read hosts from config file
-	if recv_host == 'R1' :
-		dest_ip = '192.168.1.1'
-	elif recv_host == 'R2' :
-		dest_ip = '192.168.1.2'
 
 	# Split multi command lines into separate commands (i.e int f0/1; shutdown)
 	cmd_list = cmd_str.split(';')
 
 	# Tell paramiko to trust the host
 	ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-	# TODO: Whitelist phone-nr -> user/password
-	ssh.connect(dest_ip, username='landizz', password='admin')
+	# Set up connection to host
+	ssh.connect(dest_ip, username, password)
+	# Open a shell
 	chan = ssh.invoke_shell()
 
-	# All commands are executed from global configuration mode (is this good?)
+	# All commands are executed from global configuration mode
 	chan.send('config terminal\n')
 	time.sleep(0.2)
 
