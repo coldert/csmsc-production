@@ -1,6 +1,0 @@
-# IDENTIFIER is used in the sms
-# IP ADDRESS is what that IDENTIFIER should map to
-[hosts]
-R1=192.168.1.1
-R2=192.168.1.2
-

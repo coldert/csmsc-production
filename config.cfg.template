@@ -1,11 +1,19 @@
-[SECTION]
-# SECTION is a section name used to retrieve the entries
+[smsgateway]
 user=USERNAME
 pass=PASSWORD
-# Use user and pass if the service demands it
-gateway_url=SMS_GATEWAY_DOMAIN
-gateway_file=SMS_GATEWAY_FILE
 # The gateway_url is the domain part of the url (i.e www.example.com)
+gateway_url=SMS_GATEWAY_DOMAIN
 # gateway_file is the actual file to handle the request (i.e sms.php)
-charset=UTF-8
+gateway_file=SMS_GATEWAY_FILE
 # charset should probably be UTF-8, but change according to sms-gateway manual
+charset=UTF-8
+
+[users]
+# Map phone number to Cisco device login credentials
+0046707xxxxxx=user:password
+
+[hosts]
+# R1 is a hostname used in the sms. Could be same as device hostname
+# The ip address is what hostname should map to
+R1=192.168.1.1
+R2=192.168.1.2
