@@ -21,7 +21,6 @@ class GetRequestHandler(BaseHTTPRequestHandler):
 def RunServerHTTP(port) :
 	
 	# Makes 'httpd' a object, specifices ip:port and the request handler.
-	# TODO: Add server address to config.cfg
 	httpd = HTTPServer(('', port), GetRequestHandler)
 	try :	
 		# Starts HTTP server to receive SMS from SMS Gateway
