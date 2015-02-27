@@ -49,12 +49,12 @@ def parse_phone(phone_number):
 	
 # Get username/password from list of phonenumbers
 def get_credentials(phone_number):
-	user = config.get('users', phone_number)
+	user = conf.get('users', phone_number)
 	return user.split(':') if user else []
 
 # Get host IP from list of hostnames
 def get_host_ip(hostname):
-	host = config.get('hosts', hostname)
+	host = conf.get('hosts', hostname)
 	return host if host else None
 
 # Function for sending SMS data back to the SMS gateway for handling
