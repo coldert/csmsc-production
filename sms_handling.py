@@ -37,7 +37,7 @@ def incoming_sms(command_string, originator_string):
 	# Send a reply to the user via the sms gateway
 	if originator:
 		print "SENDING SMS..."
-		#send_sms(originator, recv_host_output, conf.get('smsgateway', 'user'), conf.get('smsgateway', 'pass'))
+		send_sms(originator, recv_host_output, conf.get('smsgateway', 'user'), conf.get('smsgateway', 'pass'))
 	else:
 		print "NO ORIGINATOR"
 	print recv_host_output
@@ -67,7 +67,7 @@ def send_sms(recv, msg, user, passw):
 	text = 'text=' + quote(msg)
 	
 	# Makes the PATH for the GET message
-	gateway_request = "/" + conf.get('smsgateway', 'gateway_file') + username + '&' + password + '&type=text&' + dest + '&charset=' + conf.get('smsgateway', 'charset') + '&' + text
+	gateway_request = "/" + conf.get('smsgateway', 'gateway_file') + "?" + username + '&' + password + '&type=text&' + dest + '&charset=' + conf.get('smsgateway', 'charset') + '&' + text
 	print gateway_request
 	# Working HTTP GET, 'gateway_url' is the url from which you want to use GET on. NOTE: Tested against 'https://docs.python.org/2/'
 	http_connection = httplib.HTTPConnection(conf.get('smsgateway', 'gateway_url'))
