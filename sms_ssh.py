@@ -4,7 +4,7 @@ import paramiko
 import time
 
 # Connect to the host and execute the commands
-def ssh_connect(recv_host, cmd_str, username, password):
+def ssh_connect(dest_ip, cmd_str, username, password):
 
 	# Split multi command lines into separate commands (i.e int f0/1; shutdown)
 	cmd_list = cmd_str.split(';')
@@ -14,7 +14,7 @@ def ssh_connect(recv_host, cmd_str, username, password):
 	# Tell paramiko to trust the host
 	ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 	# Set up connection to host
-	ssh.connect(dest_ip, username, password)
+	ssh.connect(dest_ip, 22, username, password)
 	# Open a shell
 	chan = ssh.invoke_shell()
 
@@ -29,4 +29,5 @@ def ssh_connect(recv_host, cmd_str, username, password):
 		time.sleep(0.2)
 	
 	# TODO: How much data should we get..?
-	return chan.recv(4096)
+	return_msg = chan.recv(4096)
+	return return_msg

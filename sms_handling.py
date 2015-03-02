@@ -25,16 +25,17 @@ def incoming_sms(command_string, originator_string):
 	# originator must be in format 0046XXXXXXXXXXX
 	originator = parse_phone(originator_string) if originator_string != "" else None
 	(username, password) = get_credentials(originator)
-	host_ip = get_host_ip(command_host)
+	host_ip = get_host_ip(command_host.strip())
 	print username, password, host_ip #DEBUGGING
 
 	# Send a command to a host via SSH and returns the output
 	try:
 		recv_host_output = sms_ssh.ssh_connect(host_ip, complete_cmd_string, username, password)
 	except Exception as e:
-		recv_host_output = "Something went wrong."
+		recv_host_output = e
 		
 	# Send a reply to the user via the sms gateway
+	# TODO: Split into several sms if longer than 160 characters
 	if originator:
 		print "SENDING SMS..."
 		send_sms(originator, recv_host_output, conf.get('smsgateway', 'user'), conf.get('smsgateway', 'pass'))
@@ -70,7 +71,7 @@ def send_sms(recv, msg, user, passw):
 	gateway_request = "/" + conf.get('smsgateway', 'gateway_file') + "?" + username + '&' + password + '&type=text&' + dest + '&charset=' + conf.get('smsgateway', 'charset') + '&' + text
 	print gateway_request
 	# Working HTTP GET, 'gateway_url' is the url from which you want to use GET on. NOTE: Tested against 'https://docs.python.org/2/'
-	http_connection = httplib.HTTPConnection(conf.get('smsgateway', 'gateway_url'))
+	http_connection = httplib.HTTPSConnection(conf.get('smsgateway', 'gateway_url'))
 	# Calling a function of the http connection object, from which we use GET with the specified path('gateway_request')
 	http_connection.request('GET', gateway_request)
 
@@ -80,4 +81,4 @@ def send_sms(recv, msg, user, passw):
 	if connection_response.status != 200:
 		print "SMS not sent.", connection_response.msg
 	else:
-		print "SMS sent successfully."
+		print "SMS sent successfully.", connection_response.msg
