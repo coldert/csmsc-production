@@ -12,8 +12,8 @@ class GetRequestHandler(BaseHTTPRequestHandler):
 		# Parse the requested url and get the query string parameters
 		get_path = urlparse(self.path)
 		query = parse_qs(get_path.query)
-		command = query.get('text', '')[0]
-		originator = query.get('originator', '')[0]
+		command = query.get('text', '')[0] if 'text' in query else ''
+		originator = query.get('originator', '')[0] if 'originator' in query else ''
 		# Calls the function which notifies the arrival of a SMS
 		sms_handling.incoming_sms(command, originator)
 

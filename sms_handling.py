@@ -20,10 +20,10 @@ def incoming_sms(command_string, originator_string):
 	(command_host, command) = command_string.split('!') if "!" in command_string else ['', command_string]
 	# Parse command string into actual Cisco IOS commands
 	complete_cmd_string = sms_tolk.parse(command)
-	print command_host, complete_cmd_string #DEBUGGING
+	print "HOST:"+command_host, "CMD:"+complete_cmd_string #DEBUGGING
 	
 	# originator must be in format 0046XXXXXXXXXXX
-	originator = parse_phone(originator_string) if originator_string != "" else None
+	originator = parse_phone(originator_string) if originator_string != '' else ''
 	(username, password) = get_credentials(originator)
 	host_ip = get_host_ip(command_host.strip())
 	print username, password, host_ip #DEBUGGING
@@ -42,7 +42,7 @@ def incoming_sms(command_string, originator_string):
 	# TODO: Output needs formatting...
 	if originator:
 		print "TRYING TO SEND SMS TO ", originator
-		send_sms(originator, recv_host_output, conf.get('smsgateway', 'user'), conf.get('smsgateway', 'pass'))
+		send_sms(originator, str(recv_host_output), conf.get('smsgateway', 'user'), conf.get('smsgateway', 'pass'))
 	else:
 		print "NO ORIGINATOR. NO SMS SENT."
 	# Print reply to console
@@ -55,12 +55,12 @@ def parse_phone(phone_number):
 	
 # Get username/password from list of phonenumbers
 def get_credentials(phone_number):
-	user = conf.get('users', phone_number)
+	user = conf.get('users', phone_number) if phone_number else ''
 	return user.split(':') if user else [None, None]
 
 # Get host IP from list of hostnames
 def get_host_ip(hostname):
-	host = conf.get('hosts', hostname)
+	host = conf.get('hosts', hostname) if hostname else ''
 	return host if host else None
 
 # Function for sending SMS data back to the SMS gateway for handling
