@@ -20,7 +20,7 @@ def incoming_sms(command_string, originator_string):
 	(command_host, command) = command_string.split('!') if "!" in command_string else ['', command_string]
 	# Parse command string into actual Cisco IOS commands
 	complete_cmd_string = sms_tolk.parse(command)
-	print "HOST:"+command_host, "CMD:"+complete_cmd_string #DEBUGGING
+	print "HOST: "+command_host, "CMD: "+complete_cmd_string #DEBUGGING
 	
 	# originator must be in format 0046XXXXXXXXXXX
 	originator = parse_phone(originator_string) if originator_string != '' else ''
@@ -39,7 +39,7 @@ def incoming_sms(command_string, originator_string):
 		
 	# Send a reply to the user via the sms gateway
 	# TODO: Split into several sms if longer than 160 characters
-	# TODO: Output needs formatting...
+	# TODO: Output needs formatting. Format in parameter in XML?
 	if originator:
 		print "TRYING TO SEND SMS TO ", originator
 		send_sms(originator, str(recv_host_output), conf.get('smsgateway', 'user'), conf.get('smsgateway', 'pass'))
