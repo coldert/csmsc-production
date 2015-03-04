@@ -17,10 +17,10 @@ def incoming_sms(command_string, originator_string):
 	
 	# Split command_string into HOST and COMMAND parts
 	# TODO: What happens if no HOST is included?
-	(command_host, command) = command_string.split('!')
+	(command_host, command) = command_string.split('!') if "!" in command_string else ['', command_string]
 	# Parse command string into actual Cisco IOS commands
 	complete_cmd_string = sms_tolk.parse(command)
-	print complete_cmd_string #DEBUGGING
+	print command_host, complete_cmd_string #DEBUGGING
 	
 	# originator must be in format 0046XXXXXXXXXXX
 	originator = parse_phone(originator_string) if originator_string != "" else None
@@ -29,18 +29,23 @@ def incoming_sms(command_string, originator_string):
 	print username, password, host_ip #DEBUGGING
 
 	# Send a command to a host via SSH and returns the output
-	try:
-		recv_host_output = sms_ssh.ssh_connect(host_ip, complete_cmd_string, username, password)
-	except Exception as e:
-		recv_host_output = e
+	if host_ip:
+		try:
+			recv_host_output = sms_ssh.ssh_connect(host_ip, complete_cmd_string, username, password)
+		except Exception as e:
+			recv_host_output = e
+	else:
+		recv_host_output = "No host specified (i.e R1, HQ_SW1)"
 		
 	# Send a reply to the user via the sms gateway
 	# TODO: Split into several sms if longer than 160 characters
+	# TODO: Output needs formatting...
 	if originator:
-		print "SENDING SMS..."
+		print "TRYING TO SEND SMS TO ", originator
 		send_sms(originator, recv_host_output, conf.get('smsgateway', 'user'), conf.get('smsgateway', 'pass'))
 	else:
-		print "NO ORIGINATOR"
+		print "NO ORIGINATOR. NO SMS SENT."
+	# Print reply to console
 	print recv_host_output
 
 # Parse phone number
@@ -51,7 +56,7 @@ def parse_phone(phone_number):
 # Get username/password from list of phonenumbers
 def get_credentials(phone_number):
 	user = conf.get('users', phone_number)
-	return user.split(':') if user else []
+	return user.split(':') if user else [None, None]
 
 # Get host IP from list of hostnames
 def get_host_ip(hostname):
@@ -75,7 +80,7 @@ def send_sms(recv, msg, user, passw):
 	# Calling a function of the http connection object, from which we use GET with the specified path('gateway_request')
 	http_connection.request('GET', gateway_request)
 
-	# Gets the response, used for testing. Might be useful for checking status of the HTTP receiver.
+	# Get the response from sms gateway
 	# TODO: We should log all sent messages
 	connection_response = http_connection.getresponse()
 	if connection_response.status != 200:
