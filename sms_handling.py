@@ -16,7 +16,6 @@ conf.read('config.cfg')
 def incoming_sms(command_string, originator_string):
 	
 	# Split command_string into HOST and COMMAND parts
-	# TODO: What happens if no HOST is included?
 	(command_host, command) = command_string.split('!') if "!" in command_string else ['', command_string]
 	# Parse command string into actual Cisco IOS commands
 	complete_cmd_string = sms_tolk.parse(command)
@@ -29,7 +28,7 @@ def incoming_sms(command_string, originator_string):
 	print username, password, host_ip #DEBUGGING
 
 	# Send a command to a host via SSH and returns the output
-	if host_ip:
+	if host_ip and username and password:
 		try:
 			recv_host_output = sms_ssh.ssh_connect(host_ip, complete_cmd_string, username, password)
 		except Exception as e:
