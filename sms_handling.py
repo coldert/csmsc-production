@@ -6,6 +6,7 @@ from urllib import unquote, quote
 import sms_ssh
 import sms_tolk
 import re
+import logging
 
 # Read configuration file
 conf = ConfigParser.ConfigParser()
@@ -31,10 +32,16 @@ def incoming_sms(command_string, originator_string):
 	if host_ip and username and password:
 		try:
 			recv_host_output = sms_ssh.ssh_connect(host_ip, complete_cmd_string, username, password)
+			# Logging SSH output
+			logging.info('SSH Output:%s', str(recv_host_output))
 		except Exception as e:
 			recv_host_output = e
+			# Logging SSH error
+			logging.error('SSH Error:%s', str(recv_host_output))
 	else:
 		recv_host_output = "No host specified (i.e R1, HQ_SW1)"
+		# Logging user input error
+		logging.warning('User Input Error:%s', str(recv_host_output))
 		
 	# Send a reply to the user via the sms gateway
 	# TODO: Split into several sms if longer than 160 characters
@@ -84,5 +91,10 @@ def send_sms(recv, msg, user, passw):
 	connection_response = http_connection.getresponse()
 	if connection_response.status != 200:
 		print "SMS not sent.", connection_response.msg
+		# Logging SMS Error
+		logging.error('SMS Error:%s', connection_response.msg)
 	else:
 		print "SMS sent successfully.", connection_response.msg
+		# Logging SMS Success
+		logging.info('SMS Sent:%s', connection_response.msg)
+

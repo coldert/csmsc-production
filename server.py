@@ -3,6 +3,9 @@
 from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
 from urlparse import urlparse, parse_qs
 import sms_handling
+import logging
+
+logging.basicConfig(filename='csmsc.log', format='%(levelname)s:%(asctime)s:%(message)s', level=logging.DEBUG)
 
 # Class for BaseHTTPRequestHandler, receives HTTP SMS paths and passes them to be processed.
 class GetRequestHandler(BaseHTTPRequestHandler):
@@ -14,6 +17,8 @@ class GetRequestHandler(BaseHTTPRequestHandler):
 		query = parse_qs(get_path.query)
 		command = query.get('text', '')[0] if 'text' in query else ''
 		originator = query.get('originator', '')[0] if 'originator' in query else ''
+		# Logging incomming SMS
+		logging.info('ORIGINATOR:%s COMMAND:%s', originator, command)
 		# Calls the function which notifies the arrival of a SMS
 		sms_handling.incoming_sms(command, originator)
 
