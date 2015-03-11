@@ -26,7 +26,6 @@ def incoming_sms(command_string, originator_string):
 	originator = parse_phone(originator_string) if originator_string != '' else ''
 	(username, password) = get_credentials(originator)
 	host_ip = get_host_ip(command_host.strip())
-	print username, password, host_ip #DEBUGGING
 
 	# Send a command to a host via SSH and returns the output
 	if host_ip and username and password:
@@ -87,7 +86,6 @@ def send_sms(recv, msg, user, passw):
 	http_connection.request('GET', gateway_request)
 
 	# Get the response from sms gateway
-	# TODO: We should log all sent messages
 	connection_response = http_connection.getresponse()
 	if connection_response.status != 200:
 		print "SMS not sent.", connection_response.msg

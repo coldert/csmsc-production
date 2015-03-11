@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from BaseHTTPServer import BaseHTTPRequestHandler,HTTPServer
+from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from urlparse import urlparse, parse_qs
 import sms_handling
 import logging
@@ -15,6 +15,8 @@ class GetRequestHandler(BaseHTTPRequestHandler):
 		# Parse the requested url and get the query string parameters
 		get_path = urlparse(self.path)
 		query = parse_qs(get_path.query)
+		# TODO: Query string attributes should be defined 
+		#       in config.cfg to handle different gateway providers
 		command = query.get('text', '')[0] if 'text' in query else ''
 		originator = query.get('originator', '')[0] if 'originator' in query else ''
 		# Logging incomming SMS
@@ -31,11 +33,13 @@ def RunServerHTTP(port) :
 		# Starts HTTP server to receive SMS from SMS Gateway
 		print "Listening on port", port
 		httpd.serve_forever()
+		logging.info('Server started')
 
 	# CTRL-C to shutdown HTTP server and the script for the moment.
 	except KeyboardInterrupt:	
 		print "Server shutdown..."
 		httpd.server_close()
+		logging.info('Server stopped')
 
 # Start the server
 RunServerHTTP(80)
