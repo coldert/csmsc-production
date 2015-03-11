@@ -5,7 +5,7 @@ from urlparse import urlparse, parse_qs
 import sms_handling
 import logging
 
-logging.basicConfig(filename='csmsc.log', format='%(levelname)s:%(asctime)s:%(message)s', level=logging.DEBUG)
+logging.basicConfig(filename='csmsc.log', format='%(asctime)s %(levelname)-8s %(message)s', level=logging.DEBUG)
 
 # Class for BaseHTTPRequestHandler, receives HTTP SMS paths and passes them to be processed.
 class GetRequestHandler(BaseHTTPRequestHandler):
