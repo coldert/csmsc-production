@@ -72,13 +72,18 @@ def get_host_ip(hostname):
 def send_sms(recv, msg, user, passw):
 
 	# Adds the data to the their respective attribute of the HTTP path.
-	username = 'username=' + user
-	password = 'password=' + passw
-	dest = 'destination=' + recv
-	text = 'text=' + quote(msg)
+	sms_file = '/' + conf.get('smsgateway', 'gateway_file') + '?' 
+	sms_query = []
+	sms_query.append('username=' + user)
+	sms_query.append('password=' + passw)
+	sms_query.append('destination=' + recv)
+	sms_query.append('type=text')
+	sms_query.append('charset=' + conf.get('smsgateway', 'charset'))
+	sms_query.append('allowconcat=6')
+	sms_query.append('text=' + quote(msg))
 	
 	# Makes the PATH for the GET message
-	gateway_request = "/" + conf.get('smsgateway', 'gateway_file') + "?" + username + '&' + password + '&type=text&' + dest + '&charset=' + conf.get('smsgateway', 'charset') + '&' + text
+	gateway_request = sms_file + '&'.join(sms_query)
 	print gateway_request
 	# Working HTTP GET, 'gateway_url' is the url from which you want to use GET on. NOTE: Tested against 'https://docs.python.org/2/'
 	http_connection = httplib.HTTPSConnection(conf.get('smsgateway', 'gateway_url'))
