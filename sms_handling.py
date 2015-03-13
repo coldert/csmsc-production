@@ -51,7 +51,7 @@ def incoming_sms(command_string, originator_string):
 	else:
 		print "NO ORIGINATOR. NO SMS SENT."
 	# Print reply to console
-	print recv_host_output
+	#print recv_host_output
 
 # Parse phone number
 def parse_phone(phone_number):
@@ -84,7 +84,7 @@ def send_sms(recv, msg, user, passw):
 	
 	# Makes the PATH for the GET message
 	gateway_request = sms_file + '&'.join(sms_query)
-	print gateway_request
+	#print gateway_request
 	# Working HTTP GET, 'gateway_url' is the url from which you want to use GET on. NOTE: Tested against 'https://docs.python.org/2/'
 	http_connection = httplib.HTTPSConnection(conf.get('smsgateway', 'gateway_url'))
 	# Calling a function of the http connection object, from which we use GET with the specified path('gateway_request')
