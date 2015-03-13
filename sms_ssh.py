@@ -26,7 +26,10 @@ def ssh_connect(dest_ip, cmd_str, username, password):
 	for i in cmd_list :
 		chan.send(i + '\n')
 		# Give the device some time to execute the command
-		time.sleep(0.2)
+		if 'ping' in i:
+			time.sleep(10.0)
+		else:
+			time.sleep(0.2)
 	
 	# TODO: How much data should we get..?
 	return_msg = chan.recv(4096)
