@@ -93,11 +93,11 @@ def send_sms(recv, msg, user, passw):
 	# Get the response from sms gateway
 	connection_response = http_connection.getresponse()
 	if connection_response.status != 200:
-		print "SMS not sent.", connection_response.msg
+		print "SMS not sent."
 		# Logging SMS Error
 		logging.error('SMS Error:%s', connection_response.msg)
 	else:
-		print "SMS sent successfully.", connection_response.msg
+		print "SMS sent successfully."
 		# Logging SMS Success
 		logging.info('SMS Sent:%s', connection_response.msg)
 
