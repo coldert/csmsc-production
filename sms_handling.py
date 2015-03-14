@@ -43,8 +43,7 @@ def incoming_sms(command_string, originator_string):
 		logging.warning('User Input Error:%s', str(recv_host_output))
 		
 	# Send a reply to the user via the sms gateway
-	# TODO: Split into several sms if longer than 160 characters
-	# TODO: Output needs formatting. Format in parameter in XML?
+	# TODO: Output needs formatting?
 	if originator:
 		print "TRYING TO SEND SMS TO ", originator
 		send_sms(originator, str(recv_host_output), conf.get('smsgateway', 'user'), conf.get('smsgateway', 'pass'))
