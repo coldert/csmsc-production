@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# Python 2.7.3 script that matches a string against XML document.
 
 import xml.etree.ElementTree as ET
 import re
@@ -58,7 +57,7 @@ def parse(cmd_string):
 	return command
 
 # Function to convert /24 to 255.255.255.0
-# code.activestate.com/recipies/576483-convert-subnetmask-from-cidr-notation-to-dotdecima/
+# http://code.activestate.com/recipes/576483-convert-subnetmask-from-cidr-notation-to-dotdecima/
 def cidr_to_dotted(mask):
 	bits = 0
 	for i in xrange(32-mask,32):

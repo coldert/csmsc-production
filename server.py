@@ -17,8 +17,8 @@ class GetRequestHandler(BaseHTTPRequestHandler):
 		query = parse_qs(get_path.query)
 		# TODO: Query string attributes should be defined 
 		#       in config.cfg to handle different gateway providers
-		command = query.get('text', '')[0] if 'text' in query else ''
-		originator = query.get('originator', '')[0] if 'originator' in query else ''
+		command = query.get('text', '')[0]
+		originator = query.get('originator', '')[0]
 		# Logging incomming SMS
 		logging.info('ORIGINATOR:%s COMMAND:%s', originator, command)
 		# Calls the function which notifies the arrival of a SMS
